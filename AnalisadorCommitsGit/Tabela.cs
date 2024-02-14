@@ -6,12 +6,12 @@ namespace AnalisadorCommitsGit;
 public class Tabela: ITabela
 {
     private readonly List<string> _colunas;
-    private readonly List<string> _linhas;
+    private readonly List<Ranking> _linhas;
 
     public Tabela()
     {
         _colunas = new List<string>();
-        _linhas = new List<string>();
+        _linhas = new List<Ranking>();
     }
     public ITabela AddColumn(string descricao)
     {
@@ -19,25 +19,20 @@ public class Tabela: ITabela
         return this;
     }
 
-    public ITabela AddDados(string texto)
+    public ITabela AddRow(Ranking dados)
     {
-        _linhas.Add(texto);
+        _linhas.Add(dados);
         return this;
     }
 
-    public ITabela AddColumn(string descricao, IEnumerable<string> dados)
-    {
-        _colunas.Add(descricao);
-        _linhas.AddRange(dados);
-        return this;
-    }
+
 
     public void Criar()
     {
         var tabela = new ConsoleTable(_colunas.ToArray());
         
-        foreach (var linha in _linhas)
-            tabela.AddRow(linha);
+        foreach (var linha in _linhas.Take(10))
+            tabela.AddRow(linha.Nome, linha.Quantidade);
         
         tabela.Write();
         

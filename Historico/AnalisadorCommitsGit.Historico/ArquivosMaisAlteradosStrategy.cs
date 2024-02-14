@@ -13,8 +13,15 @@ public class ArquivosMaisAlteradosStrategy : IStrategyRun
             .Select(group => new Ranking(group.Key, group.Count()));
         var ordenadoEmDescrecente = quantidadePorArquivos.OrderByDescending(x => x.Quantidade);
         _tabela
-            .AddColumn(descricao: "Nome do Arquivo", ordenadoEmDescrecente.Select(x=>x.Nome))
-            .Criar();
+            .AddColumn(descricao: "Nome do Arquivo")
+            .AddColumn(descricao: "Quantidade");
+        
+        foreach (var dados in ordenadoEmDescrecente)
+        {
+            _tabela.AddRow(dados);
+        }
+        
+        _tabela.Criar();
     }
 
     public IStrategyRun AddTabela(ITabela tabela)
