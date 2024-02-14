@@ -5,6 +5,7 @@ public class AnalisadorCommits
     private readonly ITabela _tabela;
     private readonly IGitCommit _gitCommit;
     private IEnumerable<Commit> _commits;
+    private ArquivosMaisAlteradosStrategy _strategy;
 
     public AnalisadorCommits(ITabela tabela, IGitCommit gitCommit)
     {
@@ -13,16 +14,16 @@ public class AnalisadorCommits
     }
     
     public void ListarArquivosMaisAlterados()
-    {
-        _tabela
-            .AddColumn(descricao: "Nome do Arquivo")
-            .AddDados("arquivo.txt")
-            .Criar();
-
-    }
+        => _strategy.Run();
 
     public void ExtrairDados()
+        => _commits = _gitCommit.ListarCommits();
+
+    public void AddEstrategia(ArquivosMaisAlteradosStrategy strategy)
     {
-        _commits = _gitCommit.ListarCommits().ToList();
+        _strategy = strategy;
+        _strategy
+            .AddTabela(_tabela)
+            .AddGitCommit(_gitCommit);
     }
 }

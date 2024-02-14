@@ -25,12 +25,21 @@ public class Tabela: ITabela
         return this;
     }
 
+    public ITabela AddColumn(string descricao, IEnumerable<string> dados)
+    {
+        _colunas.Add(descricao);
+        _linhas.AddRange(dados);
+        return this;
+    }
+
     public void Criar()
     {
-        var table = new ConsoleTable(_colunas.ToArray());
-        table.AddRow(_linhas.ToArray());
+        var tabela = new ConsoleTable(_colunas.ToArray());
         
-        table.Write();
+        foreach (var linha in _linhas)
+            tabela.AddRow(linha);
+        
+        tabela.Write();
         
         this.Dispose();
     }

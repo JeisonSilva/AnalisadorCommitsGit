@@ -7,9 +7,9 @@ using AnalisadorCommitsGit.Historico.Git;
 using ConsoleTools;
 
 var tabela = new Tabela();
-var gitCommits = new GitCommits();
+var gitCommits = new GitCommits(@"/home/jeison/RiderProjects/AnalisadorCommitsGit");
 var analisadorCommits = new AnalisadorCommits(tabela, gitCommits);
-
+analisadorCommits.AddEstrategia(new ArquivosMaisAlteradosStrategy());
 analisadorCommits.ExtrairDados();
 
 var menu = new ConsoleMenu(args, level:0)

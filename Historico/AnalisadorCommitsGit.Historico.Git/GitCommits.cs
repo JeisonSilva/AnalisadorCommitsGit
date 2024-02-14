@@ -6,16 +6,16 @@ public class GitCommits: IGitCommit
 {
     private readonly string _caminhoRepo;
 
-    public GitCommits()
+    public GitCommits(string caminhoRepo)
     {
-        _caminhoRepo = Directory.GetCurrentDirectory();
+        _caminhoRepo = caminhoRepo;
     }
     
     public IEnumerable<Commit> ListarCommits()
     {
         // Período de tempo desejado
-        DateTimeOffset dataInicio = DateTimeOffset.Now;
-        DateTimeOffset dataFim = dataInicio.AddDays(-30);
+        DateTimeOffset dataInicio = DateTimeOffset.Now.Date.AddDays(-30);
+        DateTimeOffset dataFim = DateTimeOffset.Now.Date.AddDays(1).AddMinutes(-1);
 
         // Abre o repositório Git
         using (var repo = new Repository(_caminhoRepo))
@@ -25,7 +25,9 @@ public class GitCommits: IGitCommit
             // Itera sobre os commits filtrados
             foreach (var commit in commits)
             {
-                 yield return new Commit(commit.Sha, commit.Message);
+                var cm =new Commit(commit.Sha, commit.Message, commit.Author.Name, commit.Author.Email);
+                cm.AddArquivos(commit.Tree.Select(x=>new Arquivo(x.Name)));
+                yield return cm;
             }
         }
     }
