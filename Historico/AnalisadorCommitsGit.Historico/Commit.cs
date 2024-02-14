@@ -9,7 +9,7 @@ public struct Commit
     private readonly string _nomeAutor;
     private readonly string _emailAutor;
     
-    public IEnumerable<Arquivo> Arquivos { get; private set; }
+    public List<Arquivo> Arquivos { get; private set; }
 
     public Commit(string sha, string mensagem, string nomeAutor, string emailAutor)
     {
@@ -17,8 +17,10 @@ public struct Commit
         _mensagem = mensagem;
         _nomeAutor = nomeAutor;
         _emailAutor = emailAutor;
+
+        Arquivos = new List<Arquivo>();
     }
 
     public void AddArquivos(IEnumerable<Arquivo> arquivos)
-        => Arquivos = arquivos;
+        => Arquivos.AddRange(arquivos);
 }

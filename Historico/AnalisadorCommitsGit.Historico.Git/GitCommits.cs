@@ -26,7 +26,7 @@ public class GitCommits: IGitCommit
             foreach (var commit in commits)
             {
                 var cm =new Commit(commit.Sha, commit.Message, commit.Author.Name, commit.Author.Email);
-                cm.AddArquivos(commit.Tree.Select(x=>new Arquivo(x.Name)));
+                cm.AddArquivos(commit.Tree.Where(x=>x.TargetType == TreeEntryTargetType.Blob).Select(x=>new Arquivo(x.Name)));
                 yield return cm;
             }
         }
